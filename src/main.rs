@@ -42,6 +42,10 @@ impl Network {
         z.mapv(|a| 1.0/(1.0+-a.exp()))
     }
 
+    fn backprop(&self, x: &Array2<f64>, y: &Array2<f64>) -> (Vec<Array2<f64>>, Vec<Array2<f64>>) {
+        unimplemented!()
+    }
+
     fn feed_forward(&self, input : &mut Array2<f64>) {
         let it = self.weights.iter().zip(self.bias.iter());
         for (_i, (w, b)) in it.enumerate() {
@@ -52,7 +56,9 @@ impl Network {
         // Update the network's weights and biases by using GD w/ backpropagation
         let mut nabla_w: Vec<Array2<f64>> =  self.weights.iter().map(|w| Array::zeros(w.raw_dim()) ).collect();
         let mut nabla_b: Vec<Array2<f64>> = self.bias.iter().map(|b| Array::zeros(b.raw_dim()) ).collect();
-        unimplemented!()
+        batch.iter().map( |tData| {
+            let (d_nabla_b, d_nabala_w) = self.backprop(&tData.inputs, &tData.outputs); 
+        });
     }
     fn stochastic_gradient_decent(
         &self, 
