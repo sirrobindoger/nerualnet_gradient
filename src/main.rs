@@ -4,6 +4,7 @@ use ndarray_rand::{rand_distr::StandardNormal, rand::{seq::SliceRandom, thread_r
 use ndarray::{Array, Array2, ArrayBase};
 use ndarray_rand::RandomExt;
 
+
 #[derive(Debug)]
 struct Network {
     num_layers: usize,
@@ -130,17 +131,16 @@ impl Network {
         };
         return (nabla_b, nabla_w)
     }
+
     fn cost_derivative(&self, output_activations: &Array2<f64>, y: &Array2<f64>) -> Array2<f64> {
         output_activations.clone() - y
     }
     
 }
 
+
+
+
 fn main() {
-    let net = Network::new( &[728,16,16,10] );
-    let mut arr : Array2<f64> = Array::random((728, 1), StandardNormal);
-    net.feed_forward(&mut arr);
-
-    println!("{:?}", net);
-
+    
 }
