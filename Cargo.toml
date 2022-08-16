@@ -9,3 +9,5 @@ edition = "2021"
 rand = "0.7.0" # Or a newer version
 ndarray = "0.15.6"
 ndarray-rand = "0.14.0"
+flate2 = "1.0.24"
+byteorder = "1.4.3"
