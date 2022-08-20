@@ -42,13 +42,6 @@ impl Network {
         ret
     }
 
-    pub fn feed_forward(&self, input : &mut Array2<f64>) {
-        let it = self.weights.iter().zip(self.biases.iter());
-        for (_i, (w, b)) in it.enumerate() {
-            *input = Network::sigmoid( &(w.dot(input) + b) ); // set the activations to the sigmoid output of the previous
-        }
-    }
-
     pub fn sgd(
         &mut self, 
         training_data: &mut [Data], 
@@ -69,7 +62,7 @@ impl Network {
                 );
             }
             for mini_batch in mini_batches {
-                self.update_mini_batch(mini_batch, eta as f64);
+                self.update_mini_batch(&mini_batch, eta as f64);
             }
 
             println!("Evalutating");
@@ -77,11 +70,11 @@ impl Network {
         }
     }
 
-    fn update_mini_batch(&mut self, mini_batch: Vec<Data>, eta: f64) {
+    fn update_mini_batch(&mut self, mini_batch: &Vec<Data>, eta: f64) {
         let mut nabla_b = Network::to_zeros(&self.biases);
         let mut nabla_w = Network::to_zeros(&self.weights);
 
-        for Data {image, label} in &mini_batch { 
+        for Data {image, label} in mini_batch { 
             let (delta_nabla_b, delta_nabla_w) = self.backprop(image, label);
             nabla_b = nabla_b.iter().zip(&delta_nabla_b).map(|(nb, dnb)| nb+dnb).collect();
             nabla_w = nabla_w.iter().zip(&delta_nabla_w).map(|(nw, dnw)| nw+dnw).collect();
@@ -154,9 +147,7 @@ impl Network {
     }
 
     fn argmax(a: &Array2<f64>) -> usize {
-        //println!("Evalutating2");
         let mut ret = 0;
-        //dbg!(&a.shape());
         for (i, el) in a.iter().enumerate() {
             if *el > a[[ret, 0]] {
                 //dbg!(&a);
@@ -171,7 +162,6 @@ impl Network {
     }
 
     fn cost_derivative(output_activations: &Array2<f64>, y: &Array2<f64>) -> Array2<f64> {
-        //dbg!(output_activations.shape(), y.shape());
         output_activations.to_owned() - y
     }
 
