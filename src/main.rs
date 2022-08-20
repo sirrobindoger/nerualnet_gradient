@@ -11,7 +11,7 @@ fn main() -> Result<(), std::io::Error> {
     env::set_var("RUST_BACKTRACE", "1");
     let mut images = loader::MNistData::load("train")?;
     let test = loader::MNistData::load("t10k")?;
-    let mut net = Network::new( &[784,16,16,10] );
+    let mut net = Network::new( &[784,30,10] );
 
     net.sgd(&mut images, 30, 10, 3, &test);
     Ok(())
